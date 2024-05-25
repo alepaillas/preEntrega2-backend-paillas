@@ -44,6 +44,47 @@ const addProductToCart = async (cid, pid, quantity = 1) => {
   return cartUpdate;
 };
 
+const removeProductFromCart = async (cid, pid) => {
+  // Check if cart exists
+  const cart = await cartModel.findOne({ _id: cid });
+  if (!cart) return { cart: false };
+
+  // Check if product exists in the cart
+  const productInCart = cart.products.find(
+    (p) => p.product._id.toString() === pid
+  );
+  if (!productInCart) return { product: false };
+
+  // Remove product from cart
+  const updatedCart = await cartModel.findOneAndUpdate(
+    { _id: cid },
+    { $pull: { products: { product: pid } } },
+    { new: true } // Return the updated cart
+  );
+
+  return updatedCart;
+};
+
+const updateProductQuantity = async (cid, pid, newQuantity) => {
+  // Check if cart exists
+  const cart = await cartModel.findOne({ _id: cid });
+  if (!cart) return { cart: false };
+
+  // Check if product exists in the cart
+  const productInCart = cart.products.find(
+    (p) => p.product._id.toString() === pid
+  );
+  if (!productInCart) return { product: false };
+
+  // Update quantity (no negative quantity handling)
+  const updatedCart = await cartModel.findOneAndUpdate(
+    { _id: cid, "products.product": pid },
+    { $set: { "products.$.quantity": newQuantity } },
+    { new: true } // Return the updated cart
+  );
+  return updatedCart;
+};
+
 const clearCart = async (cid) => {
   const cart = await cartModel.findOne({ _id: cid });
   if (!cart) return {};
@@ -55,11 +96,37 @@ const clearCart = async (cid) => {
   return cartEmpty;
 };
 
+// no funciona
+// mongo me devuleve esto
+// lo vimos en el after pero lo dejamos pendiente para otra entrega
+// porque el profesor tampoco lo pudo resolver
+/* {
+  "status": "success",
+  "payload": {
+    "acknowledged": true,
+    "modifiedCount": 0,
+    "upsertedId": null,
+    "upsertedCount": 0,
+    "matchedCount": 1
+  }
+} */
+const update = async (cid, data) => {
+  const cart = await cartModel.updateOne(
+    { _id: cid },
+    { $set: { products: data } },
+    { new: true }
+  );
+  return cart;
+};
+
 export default {
   getAll,
   getById,
   create,
   deleteOne,
   addProductToCart,
+  removeProductFromCart,
+  updateProductQuantity,
   clearCart,
+  update,
 };
