@@ -10,6 +10,7 @@ router.get("/", async (req, res) => {
     res.status(200).json({ status: "success", payload: carts });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ status: "Error", msg: "Internal server error" });
   }
 });
 
@@ -26,6 +27,7 @@ router.get("/:cid", async (req, res) => {
     res.status(200).json({ status: "success", payload: cart });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ status: "Error", msg: "Internal server error" });
   }
 });
 
@@ -36,6 +38,7 @@ router.post("/", async (req, res) => {
     res.status(201).json({ status: "success", payload: cart });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ status: "Error", msg: "Internal server error" });
   }
 });
 
@@ -59,6 +62,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
     res.status(201).json({ status: "success", payload: cart });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ status: "Error", msg: "Internal server error" });
   }
 });
 
@@ -76,6 +80,7 @@ router.delete("/:cid", async (req, res) => {
     res.status(200).json({ status: "success", payload: clearedCart });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ status: "Error", msg: "Internal server error" });
   }
 });
 
@@ -100,6 +105,7 @@ router.delete("/:cid/product/:pid", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ status: "Error", msg: "Internal server error" });
   }
 });
 
@@ -144,6 +150,9 @@ router.put("/:cid/product/:pid", async (req, res) => {
   }
 });
 
+// no funciona
+// lo vimos en el after, pero el profesor tampoco lo pudo resolver
+// lo dejo por si lo hago funcionar durante la semana
 router.put("/:cid", async (req, res) => {
   try {
     const { cid } = req.params;

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const productCollection = "products";
 
@@ -34,7 +35,13 @@ const productsSchema = new mongoose.Schema({
     default: true,
     require: true,
   },
+  category: {
+    type: String,
+    require: true,
+  },
 });
+
+productsSchema.plugin(mongoosePaginate);
 
 // Moodelo utilizado para manejar la base de datos
 export const productModel = mongoose.model(productCollection, productsSchema);

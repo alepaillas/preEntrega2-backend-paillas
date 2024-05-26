@@ -1,7 +1,7 @@
 import { productModel } from "../models/product.model.mjs";
 
-const getAll = async () => {
-  const products = await productModel.find();
+const getAll = async (query, options) => {
+  const products = await productModel.paginate(query, options);
   return products;
 };
 
